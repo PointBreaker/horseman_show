@@ -1,0 +1,7 @@
+{
+  "name": "Chiral Weather Control",
+  "description": "A Death Stranding inspired immersive weather control interface using hand gestures and generative audio.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
