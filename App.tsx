@@ -4,6 +4,7 @@ import ChiralHUD from './components/ChiralHUD';
 import GuideModal from './components/GuideModal';
 import { WeatherState, Location } from './types';
 import { LOCATIONS, PARTICLE_COUNT } from './constants';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 const App: React.FC = () => {
   const [weatherState, setWeatherState] = useState<WeatherState>(WeatherState.NORMAL);
@@ -19,30 +20,32 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-black select-none">
-      <Scene 
-        onStatsUpdate={handleStatsUpdate}
-        locationImg={LOCATIONS[location]}
-      />
-      
-      <div className="scanline" />
-      <div className="vignette" />
-      
-      <ChiralHUD 
-        weatherState={weatherState}
-        fps={fps}
-        particles={PARTICLE_COUNT}
-        location={location}
-        debugMsg={debugMsg}
-        onToggleGuide={() => setIsGuideOpen(true)}
-        onLocationChange={setLocation}
-      />
+    <LanguageProvider>
+      <div className="relative w-screen h-screen overflow-hidden bg-black select-none">
+        <Scene
+          onStatsUpdate={handleStatsUpdate}
+          locationImg={LOCATIONS[location]}
+        />
 
-      <GuideModal 
-        isOpen={isGuideOpen} 
-        onClose={() => setIsGuideOpen(false)} 
-      />
-    </div>
+        <div className="scanline" />
+        <div className="vignette" />
+
+        <ChiralHUD
+          weatherState={weatherState}
+          fps={fps}
+          particles={PARTICLE_COUNT}
+          location={location}
+          debugMsg={debugMsg}
+          onToggleGuide={() => setIsGuideOpen(true)}
+          onLocationChange={setLocation}
+        />
+
+        <GuideModal
+          isOpen={isGuideOpen}
+          onClose={() => setIsGuideOpen(false)}
+        />
+      </div>
+    </LanguageProvider>
   );
 };
 

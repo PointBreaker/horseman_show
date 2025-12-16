@@ -1,5 +1,6 @@
 import React from 'react';
 import { WeatherState, Location } from '../types';
+import { useTranslation } from '../contexts/LanguageContext';
 
 interface ChiralHUDProps {
   weatherState: WeatherState;
@@ -11,15 +12,16 @@ interface ChiralHUDProps {
   onLocationChange: (loc: Location) => void;
 }
 
-const ChiralHUD: React.FC<ChiralHUDProps> = ({ 
-  weatherState, 
-  fps, 
-  particles, 
-  location, 
+const ChiralHUD: React.FC<ChiralHUDProps> = ({
+  weatherState,
+  fps,
+  particles,
+  location,
   debugMsg,
   onToggleGuide,
   onLocationChange
 }) => {
+  const { t, language, setLanguage } = useTranslation();
   
   const getStateColor = (s: WeatherState) => {
     switch(s) {
@@ -33,11 +35,11 @@ const ChiralHUD: React.FC<ChiralHUDProps> = ({
   };
 
   const MODES = [
-    { id: WeatherState.NORMAL, label: 'TEMPORAL_FALL', code: 'NRM-01' },
-    { id: WeatherState.FREEZE, label: 'TIME_SUSPENSION', code: 'FRZ-02' },
-    { id: WeatherState.REVERSE, label: 'ENTROPY_REVERSAL', code: 'REV-03' },
-    { id: WeatherState.ROTATE, label: 'SPATIAL_SHIFT', code: 'ROT-04' },
-    { id: WeatherState.LIGHTNING, label: 'HIGH_VOLTAGE', code: 'LGT-05' },
+    { id: WeatherState.NORMAL, label: t.temporalFall, code: 'NRM-01' },
+    { id: WeatherState.FREEZE, label: t.timeSuspension, code: 'FRZ-02' },
+    { id: WeatherState.REVERSE, label: t.entropyReversal, code: 'REV-03' },
+    { id: WeatherState.ROTATE, label: t.spatialShift, code: 'ROT-04' },
+    { id: WeatherState.LIGHTNING, label: t.highVoltage, code: 'LGT-05' },
   ];
 
   return (
@@ -46,15 +48,21 @@ const ChiralHUD: React.FC<ChiralHUDProps> = ({
       {/* Top Header */}
       <div className="flex justify-between items-start border-t-2 border-white/20 pt-2">
         <div className="flex flex-col">
-          <h1 className="text-2xl font-bold tracking-widest text-white/90">CHIRAL WEATHER CONTROL</h1>
-          <span className="text-xs text-white/50 tracking-[0.3em]">BRIDGES ID: 884-XJ-11</span>
+          <h1 className="text-2xl font-bold tracking-widest text-white/90">{t.chiralWeatherControl}</h1>
+          <span className="text-xs text-white/50 tracking-[0.3em]">{t.bridgesId}</span>
         </div>
-        
-        <div className="flex flex-col items-end">
+
+        <div className="flex flex-col items-end gap-2">
            <div className={`text-xl font-bold tracking-widest transition-colors duration-300 ${getStateColor(weatherState)}`}>
              {weatherState}
            </div>
-           <div className="text-xs text-white/50 mt-1">SYS.STATUS_NORMAL</div>
+           <div className="text-xs text-white/50 mt-1">{t.systemStatusNormal}</div>
+           <button
+             onClick={() => setLanguage(language === 'en' ? 'zh' : 'en')}
+             className="text-xs text-white/70 hover:text-white transition-colors px-2 py-1 border border-white/20 pointer-events-auto"
+           >
+             {language === 'en' ? '中文' : 'EN'}
+           </button>
         </div>
       </div>
 
@@ -75,24 +83,24 @@ const ChiralHUD: React.FC<ChiralHUDProps> = ({
          
          {/* System Stats */}
          <div className="flex flex-col gap-1 border-l-2 border-white/10 pl-4 py-2">
-            <div className="text-[10px] text-white/40 tracking-[0.2em] mb-1">SYSTEM_METRICS</div>
+            <div className="text-[10px] text-white/40 tracking-[0.2em] mb-1">{t.systemMetrics}</div>
             <div className="text-xs text-white/60 font-mono flex justify-between">
-              <span>FPS_RATE</span>
+              <span>{t.fpsRate}</span>
               <span className="text-white">{fps}</span>
             </div>
             <div className="text-xs text-white/60 font-mono flex justify-between">
-              <span>PARTICLE_DENSITY</span>
+              <span>{t.particleDensity}</span>
               <span className="text-white">{particles}</span>
             </div>
             <div className="text-xs text-white/60 font-mono flex justify-between">
-              <span>CHIRAL_LEVEL</span>
+              <span>{t.chiralLevel}</span>
               <span className="text-white">{Math.random().toFixed(4)}</span>
             </div>
          </div>
 
          {/* Operation Mode List */}
          <div className="flex flex-col gap-2">
-            <div className="text-[10px] text-white/40 tracking-[0.2em] mb-1 pl-4 border-l-2 border-transparent">OPERATION_MODE</div>
+            <div className="text-[10px] text-white/40 tracking-[0.2em] mb-1 pl-4 border-l-2 border-transparent">{t.operationMode}</div>
             
             {MODES.map((mode) => {
               const isActive = weatherState === mode.id;
@@ -121,7 +129,7 @@ const ChiralHUD: React.FC<ChiralHUDProps> = ({
          {/* Debug Output */}
          <div className="border-t border-white/10 pt-2 mt-2">
              <div className="text-[10px] text-orange-400 font-mono min-h-[1.5em] animate-pulse">
-                {debugMsg ? `>> ${debugMsg}` : '> AWAITING_INPUT...'}
+                {debugMsg ? `>> ${debugMsg}` : `> ${t.awaitingInput}`}
              </div>
          </div>
 
@@ -141,11 +149,11 @@ const ChiralHUD: React.FC<ChiralHUDProps> = ({
           ))}
         </div>
 
-        <button 
+        <button
           onClick={onToggleGuide}
           className="pointer-events-auto px-4 py-2 border border-white text-white hover:bg-white hover:text-black transition-colors text-sm tracking-widest"
         >
-          DATA_GUIDE
+          {t.dataGuide}
         </button>
       </div>
     </div>
